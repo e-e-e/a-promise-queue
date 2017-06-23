@@ -1,0 +1,24 @@
+{
+  "name": "a-promise-queue",
+  "version": "1.0.0",
+  "description": "A native es6 promise queue with optional retry attempts.",
+  "main": "index.js",
+  "scripts": {
+    "test": "tape test.js",
+    "test-travis": "nyc tape test.js | tap-spec"
+  },
+  "keywords": [
+    "queue",
+    "promise",
+    "es6"
+  ],
+  "author": "Benjamin Forster",
+  "license": "ISC",
+  "devDependencies": {
+    "bluebird": "^3.5.0",
+    "coveralls": "latest",
+    "nyc": "latest",
+    "tape": "latest",
+    "tap-spec": "latest"
+  }
+}
