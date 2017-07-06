@@ -1,6 +1,6 @@
 {
   "name": "a-promise-queue",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A native es6 promise queue with optional retry attempts.",
   "main": "index.js",
   "scripts": {
