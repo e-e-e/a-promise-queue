@@ -95,6 +95,27 @@ tape('retrys for a number of attempts before continuing even if there is an erro
   }).catch(fail(t));
 });
 
+tape('.flush() causes all promises in queue to be run at once and promises added after run after flush is finished', (t) => {
+  const queue = new PromiseQueue();
+  let counter = 0;
+  let flushed = false;
+  const count = () => { counter += 1; };
+  queue.add(() => Promise.delay(20).then(count));
+  queue.add(() => Promise.delay(20).then(count));
+  queue.add(() => Promise.delay(20).then(count));
+  queue.add(() => Promise.delay(20).then(count));
+  queue.flush().then(() => {
+    flushed = true;
+    t.same(counter, 4);
+  })
+  queue.add(() => Promise.delay(20).then(count))
+    .then(() => {
+      t.same(counter, 5);
+      t.ok(flushed);
+      t.end();
+    });
+})
+
 tape('is reusable', (t) => {
   let doneCounter = 0;
   let counter = 0;

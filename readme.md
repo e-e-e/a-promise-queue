@@ -23,7 +23,7 @@ npm install a-promise-queue
   Optional flavour lets you set the type of promises used, defaults to es6 native promises.
 + `queue.length`
   Returns number of promises waiting to be executed.
-+ `queue.add(Function generator, [Object options])`
++ `var promise = queue.add(Function generator, [Object options])`
   Returns a promise which is resolved or rejected when the promise produced by the generator is eventually resolved.
   Example options:
   ```js
@@ -32,6 +32,10 @@ npm install a-promise-queue
       priority: number, // execution is ordered by priority default = 0.
     }
   ```
++ `var promise = queue.flush()`
+  Runs all promises currently in the queue concurrently.
+  Returns a promise which is resolved when all promises are finished.
+  Any promises added after `.flush()` will execute after flush is complete.
 
 ## Example:
 
