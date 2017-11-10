@@ -25,5 +25,8 @@
     "nyc": "latest",
     "tape": "latest",
     "tap-spec": "latest"
+  },
+  "dependencies": {
+    "standard": "^10.0.3"
   }
 }
