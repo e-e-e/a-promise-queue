@@ -137,3 +137,19 @@ tape('is reusable', (t) => {
   })
 })
 
+tape('can be configured with concurrency', (t) => {
+  let i
+  const finished = () => {
+    t.end()
+  }
+
+  const queue = new PromiseQueue(finished, 5)
+  for (i = 0; i < 5; i++) {
+    queue.add(() => Promise.delay(20))
+  }
+  t.same(queue.length, 0)
+  for (i = 0; i < 5; i++) {
+    queue.add(() => Promise.delay(20))
+  }
+  t.same(queue.length, 5)
+})

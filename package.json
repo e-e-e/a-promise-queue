@@ -1,17 +1,20 @@
 {
   "name": "a-promise-queue",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "A native es6 promise queue with optional retry attempts.",
   "main": "index.js",
   "scripts": {
     "test": "tape test.js",
+    "test-pretty": "tape test.js | faucet",
     "test-travis": "nyc tape test.js | tap-spec",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "keywords": [
     "queue",
     "promise",
-    "es6"
+    "es6",
+    "parallel",
+    "series"
   ],
   "repository": {
     "type": "git",
@@ -22,11 +25,10 @@
   "devDependencies": {
     "bluebird": "^3.5.0",
     "coveralls": "latest",
+    "faucet": "0.0.1",
     "nyc": "latest",
-    "tape": "latest",
-    "tap-spec": "latest"
-  },
-  "dependencies": {
-    "standard": "^10.0.3"
+    "standard": "^10.0.3",
+    "tap-spec": "latest",
+    "tape": "latest"
   }
 }

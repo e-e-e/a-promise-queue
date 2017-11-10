@@ -5,9 +5,9 @@
 This is just another promise queue. Simple.
 
 + Native es6
-+ No concurency
++ With concurrency
 + Optional retry attempts for failed promises
-+ Option to use your faviour promise flavour (Bluebird, Q)
++ Option to use your favourite promise flavour (Bluebird, Q)
 
 ## Install
 
@@ -19,8 +19,10 @@ npm install a-promise-queue
 ## Interface
 
 + `queue = new PromiseQueue([Function callback], [Promise flavour])`
+  `queue = new PromiseQueue([Function callback], [Number concurrency], [Promise flavour])`
   Callback is fired whenever queue is emptied.
   Optional flavour lets you set the type of promises used, defaults to es6 native promises.
+  Optional concurrency lets you set the number of promises to run in parallel.
 + `queue.length`
   Returns number of promises waiting to be executed.
 + `var promise = queue.add(Function generator, [Object options])`
