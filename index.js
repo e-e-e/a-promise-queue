@@ -1,12 +1,33 @@
 class PromiseQueue {
-  constructor (cb, concurrency, PromiseFlavour) {
-    const flavour = (typeof concurrency !== 'number') ? concurrency : PromiseFlavour
+  constructor (options, callback) {
+    const cb = (typeof options === 'function') ? options : callback
+    const opts = (options && typeof options === 'object') ? options : {}
     this.flushing = false
-    this.Promise = flavour || Promise
-    this.concurrency = (typeof concurrency !== 'number') ? 1 : concurrency
+    this.Promise = opts.promise || Promise
+    this.concurrency = (!opts.concurrency || typeof opts.concurrency !== 'number') ? 1 : opts.concurrency
     this.promises = []
     this.queue = []
     this.callback = cb
+    if (!cb) {
+      this._makePromise()
+    }
+  }
+
+  _makePromise () {
+    this._finalPromise = new Promise((resolve, reject) => {
+      this.resolve = resolve
+      this.reject = reject
+    })
+  }
+
+  then (onResolve, onReject) {
+    if (this.callback) throw new Error('Cannot use PromiseQueue as a Promise if callback has been is set')
+    return this._finalPromise.then(onResolve, onReject)
+  }
+
+  catch (onReject) {
+    if (this.callback) throw new Error('Cannot use PromiseQueue as a Promise if callback has been is set')
+    return this._finalPromise.catch(onReject)
   }
 
   add (fn, opts) {
@@ -90,7 +111,7 @@ class PromiseQueue {
       return p.id === id
     })
     this.promises.splice(promiseId, 1)
-    if (this.promises.length === 0 && typeof this.callback === 'function') this.callback()
+    if (this.promises.length === 0) this._done()
     return true
   }
 
@@ -106,6 +127,14 @@ class PromiseQueue {
     return retry()
       .then((r) => { resolve(r) }, (e) => { reject(e) })
       .then(() => this._next(id))
+  }
+
+  _done (err) {
+    if (typeof this.callback === 'function') this.callback(err)
+    else if (this._finalPromise) {
+      this.resolve()
+      this._makePromise()
+    }
   }
 }
 
