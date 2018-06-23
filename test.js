@@ -200,3 +200,35 @@ tape('promise queue is reuseable as a promise', (t) => {
   })
 })
 
+tape('if promise queue has callback it cannot be used as promise', (t) => {
+  const finished = () => {}
+  const queue = new PromiseQueue(finished)
+  t.throws(() => queue.then(), /Cannot use PromiseQueue as a Promise if callback has been is set/)
+  t.throws(() => queue.catch(), /Cannot use PromiseQueue as a Promise if callback has been is set/)
+  t.end()
+})
+
+tape('throws error if queue.add() is not passed a function', (t) => {
+  const finished = () => {}
+  const queue = new PromiseQueue(finished)
+  t.throws(() => queue.add(), /PromiseQueue.add\(\) expects a function as an argument/)
+  t.end()
+})
+
+tape('queue.add() handles non promise returning functions', (t) => {
+  const finished = () => { t.end() }
+  const queue = new PromiseQueue(finished)
+  queue.add(() => 1).then(res => t.same(res, 1))
+})
+
+tape('queue.add() handles non promise returning functions that throw', (t) => {
+  const queue = new PromiseQueue()
+  queue.add(() => { throw new Error('failed') })
+    .then(
+      () => t.fail('should have actually thrown error'),
+      (e) => {
+        t.same(e.message, 'failed')
+        t.end()
+      }
+    )
+})
