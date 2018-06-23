@@ -4,5 +4,6 @@ node_js:
   - "7"
   - "8"
   - "10"
+before_script: "npm run-script lint"
 script: "npm run-script test-travis"
 after_script: "npm run coverage"

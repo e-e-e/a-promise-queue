@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "tape test.js",
+    "lint": "standard",
     "test-pretty": "tape test.js | faucet",
-    "test-travis": "standard && nyc tape test.js | tap-spec",
+    "test-travis": "nyc tape test.js | tap-spec",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "keywords": [
